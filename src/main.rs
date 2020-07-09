@@ -6,7 +6,7 @@ use std::io::BufWriter;
 
 fn main() {
 	//test_number(Complex64::new(-1., 0.), 15);
-	graph_png("image.png",1500, 1200, -1., 0., 400., 35).expect("Failed to graph");
+	graph_png("image2.png",1500 * 4, 1200 * 4, -1., 0., 400. * 4., 35).expect("Failed to graph");
 }
 
 #[allow(dead_code)]
@@ -61,8 +61,8 @@ fn graph_png(filename: &str, width: u32, height: u32, x_offset: f64, y_offset: f
 	let mut point: Complex64;
 	let mut z: Complex64;
 	let mut steps: usize;
-	let mut color: [u8; 3] = [0; 3];
 	let mut rgb: colorsys::Rgb;
+	let mut line: Vec<u8> = vec!(0; (3 * width) as usize);
 
 	for num_y in 0..height {
 		y = (num_y as f64 / scale) - ((height as f64 / 2.) / scale) + (y_offset as f64);
@@ -82,17 +82,17 @@ fn graph_png(filename: &str, width: u32, height: u32, x_offset: f64, y_offset: f
 
 			if steps < step_max {
 				rgb = colorsys::Rgb::from(colorsys::Hsl::new((255.*(steps as f64))/(step_max as f64), 100., 50., std::option::Option::None));
-				color[0] = rgb.get_red() as u8;
-				color[1] = rgb.get_green() as u8;
-				color[2] = rgb.get_blue() as u8;
+				line[(num_x * 3) as usize] = rgb.get_red() as u8;
+				line[(num_x * 3 + 1) as usize] = rgb.get_green() as u8;
+				line[(num_x * 3 + 2) as usize] = rgb.get_blue() as u8;
 			}
 			else {
-				color[0] = 0;
-				color[1] = 0;
-				color[2] = 0;
+				line[(num_x * 3) as usize] = 0;
+				line[(num_x * 3 + 1) as usize] = 0;
+				line[(num_x * 3 + 2) as usize] = 0;
 			}
-			swriter.write(&color)?;
 		}
+		swriter.write(&line)?;
 	}
 
 	swriter.flush()?;
