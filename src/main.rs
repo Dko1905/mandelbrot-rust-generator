@@ -52,8 +52,3 @@ fn test_number(z_input: Complex64, raise_stop: f64, raise_max: usize){
 		println!("{} has not blown up", z_input);
 	}
 }*/
-
-#[inline]
-fn f(z: Complex64, c: f64) -> Complex64 {
-	z.powi(2) - c
-}
