@@ -1,18 +1,43 @@
 use num::complex::Complex64;
 
 fn main() {
-	let mut c = Complex64::new(1., 0.); // Create complex number ( -1 + 0i )
+	graf_terminal(-2., 2., 0.1, 15, std::u32::MAX as f64);
+}
 
-	let mut n = 0;
-	while c.re < std::u32::MAX as f64{ // Try using f(z) on the complex number with the real number as c
-		println!("{} : {}", n, c);
-		
-		c = f(c, c.re);		
+fn graf_terminal(start: f64, stop: f64, step: f64, raise_max: usize, raise_stop: f64){
+	let mut y = stop;
+	let mut x = start;
 
-		n += 1;
+	let mut z: Complex64;
+	let mut steps: usize;
+
+	while y > start {
+		while x < stop {
+			z = Complex64::new(x, y);
+
+			steps = 0;
+			while z.norm() < raise_stop && steps < raise_max {
+				z = f(z, z.re);
+
+				steps += 1;
+			}
+
+			if steps < raise_max {
+				print!("#");
+			}
+			else{
+				print!(" ");
+			}
+
+			x += step;
+		}
+		println!("");
+		x = start;
+		y -= step;
 	}
 }
 
+#[inline]
 fn f(z: Complex64, c: f64) -> Complex64 {
 	z.powu(2) + c
 }
