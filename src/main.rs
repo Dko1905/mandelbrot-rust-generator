@@ -1,8 +1,8 @@
 use num::complex::Complex64;
 
 fn main() {
-	//test_number( Complex64::new(-1./2., 0.) , u32::MAX as f64, 15);
-	graph_terminal(50, 20, 0, 0, 10., 35);
+	test_number(Complex64::new(-1., 0.), 15);
+	//graph_terminal(50, 20, 0, 0, 10., 35);
 }
 
 fn graph_terminal(width: u32, height: u32, x_offset: u32, y_offset: u32, scale: f64, step_max: usize){
@@ -35,20 +35,20 @@ fn graph_terminal(width: u32, height: u32, x_offset: u32, y_offset: u32, scale: 
 		println!("");
 	}
 }
-/*
-fn test_number(z_input: Complex64, raise_stop: f64, raise_max: usize){
+
+fn test_number(z_input: Complex64, step_max: usize){
 	let mut steps = 0;
 	let mut z = z_input;
-	while z.re < raise_stop && steps < raise_max {
-		z = f(z, z_input.re);
+	while z.norm() < 2. && steps < step_max {
+		z = z * z + z_input;
 
 		steps += 1;
 	}
 
-	if steps < raise_max {
+	if steps < step_max {
 		println!("{} has blown up", z_input);
 	}
 	else{
 		println!("{} has not blown up", z_input);
 	}
-}*/
+}
