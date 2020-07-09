@@ -6,7 +6,12 @@ use std::io::BufWriter;
 
 fn main() {
 	//test_number(Complex64::new(-1., 0.), 15);
-	graph_png("image2.png",1500 * 4, 1200 * 4, -1., 0., 400. * 4., 35).expect("Failed to graph");
+	let mut scale = 400.;
+	for n in 0..10 {
+		graph_png(&format!("image{}.png", n), 1920, 1080, -1. + 1./4., 0., scale, (scale/10.) as usize).expect("Failed to graph");
+		scale *= 2.;
+		println!("{}", n);
+	}
 }
 
 #[allow(dead_code)]
@@ -81,7 +86,7 @@ fn graph_png(filename: &str, width: u32, height: u32, x_offset: f64, y_offset: f
 			}
 
 			if steps < step_max {
-				rgb = colorsys::Rgb::from(colorsys::Hsl::new((255.*(steps as f64))/(step_max as f64), 100., 50., std::option::Option::None));
+				rgb = colorsys::Rgb::from(colorsys::Hsl::new((10.*(steps as f64))%255., 100., 50., std::option::Option::None));
 				line[(num_x * 3) as usize] = rgb.get_red() as u8;
 				line[(num_x * 3 + 1) as usize] = rgb.get_green() as u8;
 				line[(num_x * 3 + 2) as usize] = rgb.get_blue() as u8;
