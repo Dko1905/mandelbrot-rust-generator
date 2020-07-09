@@ -7,15 +7,22 @@ fn main() {
 
 #[allow(dead_code)]
 fn graph_terminal(width: u32, height: u32, x_offset: u32, y_offset: u32, scale: f64, step_max: usize){
+	// Predefine all vars for faster stack
+	let mut y: f64;
+	let mut x: f64;
+	let mut point: Complex64;
+	let mut z: Complex64;
+	let mut steps: usize;
+
 	for num_y in 0..(height + 1) {
-		let y: f64 = (num_y as f64 / scale) - ((height as f64 / 2.) / scale) + (y_offset as f64);
+		y = (num_y as f64 / scale) - ((height as f64 / 2.) / scale) + (y_offset as f64);
 
 		for num_x in 0..(width + 1) {
-			let x: f64 = (num_x as f64 / scale) - ((width as f64 / 2.) / scale) + (x_offset as f64);
+			x = (num_x as f64 / scale) - ((width as f64 / 2.) / scale) + (x_offset as f64);
 
-			let point = Complex64::new(x, y);
-			let mut z = Complex64::new(0., 0.);
-			let mut steps = 0;
+			point = Complex64::new(x, y);
+			z = Complex64::new(0., 0.);
+			steps = 0;
 
 			while z.norm() < 2. && steps < step_max {
 				z = z * z + point;
