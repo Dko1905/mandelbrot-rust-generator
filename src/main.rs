@@ -1,43 +1,41 @@
 use num::complex::Complex64;
 
 fn main() {
-	test_number( Complex64::new(-1./2., 0.) , u32::MAX as f64, 15);
-	//graf_terminal(-2., 2., 0.1, 15, u32::MAX as f64);
+	//test_number( Complex64::new(-1./2., 0.) , u32::MAX as f64, 15);
+	graph_terminal(50, 20, 0, 0, 10., 35);
 }
 
-fn graf_terminal(start: f64, stop: f64, step: f64, raise_max: usize, raise_stop: f64){
-	let mut y = stop;
-	let mut x = start;
+fn graph_terminal(width: u32, height: u32, x_offset: u32, y_offset: u32, scale: f64, step_max: usize){
+	
 
-	let mut z: Complex64;
-	let mut steps: usize;
 
-	while y > start {
-		while x < stop {
-			z = Complex64::new(x, y);
+	for num_y in 0..(height + 1) {
+		let y: f64 = (num_y as f64 / scale) - ((height as f64 / 2.) / scale) + (y_offset as f64);
 
-			steps = 0;
-			while z.re < raise_stop && steps < raise_max {
-				z = f(z, z.re);
+		for num_x in 0..(width + 1) {
+			let x: f64 = (num_x as f64 / scale) - ((width as f64 / 2.) / scale) + (x_offset as f64);
+
+			let point = Complex64::new(x, y);
+			let mut z = Complex64::new(0., 0.);
+			let mut steps = 0;
+
+			while z.norm() < 2. && steps < step_max {
+				z = z * z + point;
 
 				steps += 1;
 			}
 
-			if steps < raise_max {
+			if steps < step_max {
 				print!("#");
 			}
-			else{
+			else {
 				print!(" ");
 			}
-
-			x += step;
 		}
 		println!("");
-		x = start;
-		y -= step;
 	}
 }
-
+/*
 fn test_number(z_input: Complex64, raise_stop: f64, raise_max: usize){
 	let mut steps = 0;
 	let mut z = z_input;
@@ -53,9 +51,9 @@ fn test_number(z_input: Complex64, raise_stop: f64, raise_max: usize){
 	else{
 		println!("{} has not blown up", z_input);
 	}
-}
+}*/
 
 #[inline]
 fn f(z: Complex64, c: f64) -> Complex64 {
-	z.powu(2) + c
+	z.powi(2) - c
 }
